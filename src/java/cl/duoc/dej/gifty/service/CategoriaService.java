@@ -15,10 +15,12 @@ import java.util.logging.Logger;
 
 public class CategoriaService implements CategoriaDAO {
 
+    Connection conexion;
     Logger logger;
 
     {
         logger = Logger.getLogger(getClass().getSimpleName());
+        conexion = Conexion.getConexion();
     }
 
     public CategoriaService() {
@@ -27,7 +29,6 @@ public class CategoriaService implements CategoriaDAO {
     @Override
     public Categoria crearCategoria(Categoria categoria) {
         try {
-            Connection conexion = Conexion.getConexion();
             String sql = "INSERT INTO categorias(nombre, fecha_creacion) VALUES(?, ?)";
             PreparedStatement prepareStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             prepareStatement.setString(1, categoria.getNombre());
@@ -60,8 +61,7 @@ public class CategoriaService implements CategoriaDAO {
     @Override
     public List<Categoria> getCategorias() {
         try {
-            String sql = "SELECT * FROM categorias";
-            Connection conexion = Conexion.getConexion();
+            String sql = "SELECT * FROM categorias";            
             PreparedStatement prepareStatement = conexion.prepareStatement(sql);
             ResultSet rs = prepareStatement.executeQuery();
             List<Categoria> listaCategorias = new ArrayList<>();
@@ -85,8 +85,7 @@ public class CategoriaService implements CategoriaDAO {
         String error = null;
         String mensaje = null;
         try {
-            String sql = "DELETE FROM categorias WHERE id = ?";
-            Connection conexion = Conexion.getConexion();
+            String sql = "DELETE FROM categorias WHERE id = ?";            
             PreparedStatement prepareStatement = conexion.prepareStatement(sql);
             prepareStatement.setLong(1, categoriaId);
             int resultado = prepareStatement.executeUpdate();
@@ -106,8 +105,7 @@ public class CategoriaService implements CategoriaDAO {
     @Override
     public Categoria getCategoriaById(Long categoriaId) {
         try {
-            String sql = "SELECT * FROM categorias WHERE id = ?";
-            Connection conexion = Conexion.getConexion();
+            String sql = "SELECT * FROM categorias WHERE id = ?";            
             PreparedStatement prepareStatement = conexion.prepareStatement(sql);
             prepareStatement.setLong(1, categoriaId);
             ResultSet rs = prepareStatement.executeQuery();
@@ -127,4 +125,12 @@ public class CategoriaService implements CategoriaDAO {
         return null;
     }
 
+    public Connection getConexion() {
+        return conexion;
+    }
+
+    public void setConexion(Connection conexion) {
+        this.conexion = conexion;
+    }
+    
 }

@@ -12,8 +12,13 @@ import java.util.Properties;
 public class Conexion {
 
     private static Connection connection;
+    private static String bd = "gifty";
 
     public static Connection getConexion() {
+        return getConexion(bd);
+    }
+    
+    public static Connection getConexion(String basedatos) {
         try {
             if (connection != null && !connection.isClosed()) {
                 return connection;
@@ -22,7 +27,7 @@ public class Conexion {
             Properties properties = new Properties();
             properties.put("user", "root");
             properties.put("password", "");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/gifty", properties);
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+basedatos, properties);
             return connection;
         } catch (ClassNotFoundException cnfe) {
             System.err.println("No se encontró el Driver para MySQL");
